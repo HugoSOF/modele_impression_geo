@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Devis</title>
+  <style>
+/* Style de police défini dans le BODY */
+    body {
+  font-family: Helvetica, sans-serif; 
+}
+  /* Styles pour le tableau */
+  .devis-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  .devis-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 16px;
+    color: #444;
+  }
+
+  .devis-table thead {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .devis-table th,
+  .devis-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .devis-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .devis-table tbody tr:hover {
+    background-color: #f2f2f2;
+  }
+
+  .devis-total {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 30px;
+    font-size: 20px;
+  }
+
+/* Responsive design pour le tableau */
+@media (max-width: 767px) {
+.devis-header h4 {
+font-size: 20px;
+}
+.devis-table th {
+font-size: 14px;
+}
+.devis-table td {
+font-size: 14px;
+}
+.devis-total {
+font-size: 20px;
+}
+}
+
+/* pour les deux <div> du début de tel sorte à ce qu'ils soient allignés*/
+.wrapper {
+  display: flex;
+}
+
+.left-block {
+    flex: 0,5;
+    text-align: right;
+padding-right: 30px;
+border: 1px solid;
+border-radius: 10px; 
+}
+
+.right-block {
+  flex: 1;
+}
+
+/* déplacement des élements de texte pour qu'ils soient allignés à l'ensemble */    
+.text-block {
+    padding-left:35px;
+}
+
+/* mise en forme des élements <h> afin d'obtenir le rendu avec le point et la ligne donnant la mise en forme */   
+.undertext {
+  position: relative; 
+  border-bottom: 1px solid rgb(0, 44, 109); 
+  width: 75%;
+  padding-left: 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  line-height: 1.5;
+}
+
+.undertext::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(87, 87, 87);
+  border-radius: 50%;
+  list-style: disc; 
+}
+
+/* changer la couleur des élements de nos <ul> */    
+ul {
+  color: #444444; 
+}
+
+ul strong {
+  font-weight: bold;
+}
+  </style>
+</head>
+<body>
+  <img src="https://avatars.githubusercontent.com/u/102518600?v=4">
+  <div class="wrapper">
+    <!-- Les informations de l'entreprise-->
+  <div class="right-block">
+		        <ul>
+              {{#section "Humaines"}}
+              <strong>{{{prop feature "LABEL"}}}</strong><br>
+              <strong>{{{prop feature "CATEGORY_ID"}}}</strong><br>
+              <strong>{{{prop feature "Magasin"}}}</strong><br>
+              {{/section}}
+              <br>
+          <strong>{{ dateFormat currentDate "full" "fr_FR" }}</strong> <br>
+        	</ul>
+
+	</div>
+
+    <!-- Affectation du devis -->
+  <div class="left-block">
+        <h3 class="" style="text-align:left; padding-left:20px">Affectation</h3>
+        <ul>
+          <strong>Direction :</strong> {{{prop feature "ID_ORGANIZATION_1"}}} <br>
+          <strong>Service :</strong> {{{prop feature "ID_ORGANIZATION_2"}}} <br>
+          <strong>Secteur :</strong> {{{prop feature "ID_ORGANIZATION_3"}}}<br>
+          <strong>Adresse : </strong>999 Rte de **** <br>69 001 Lyon<br>
+          France<br>
+          <strong>Tel :</strong> 06 52 24 87 90<br>
+          <strong>Contact : </strong> https://github.com/HugoSOF<br>
+        </ul>
+      </div> 
+    </div>
+<br>
+
+  <!-- Titre du document -->
+    <div class="">
+      <h2 style="text-align:center">FACTURE PROFORMAT</h2><br>
+    </div>
+	<!-- Les informations de marché -->
+<div class="text-block">  Référence : <strong>Compte Rendu</strong> / 
+  <strong>{{{prop feature "NAME"}}}</strong> / 
+  <strong>Statut : {{{prop feature "ID_STATE"}}}</strong> 
+</div>
+  <div>
+        <div class="text-block">
+        <h2 class="undertext">Devis pour : {{{prop feature "TASK_TYPE_ID"}}}</h2>
+        <ul>
+          {{#section "Contrat"}}
+          <strong>Contrat associé :</strong> {{{prop feature "LABEL_5"}}}<br>
+          {{/section}}
+          <strong>Temps passé :</strong> {{{prop feature "START_DATE"}}} - {{{prop feature "END_DATE"}}}<br>
+      </ul>
+      </div>
+    </div>
+    <br>
+ <!-- l'ensemble des informations pour permettre un suivi d'intervention -->
+ <div class="text-block">
+    <h4 class="undertext">Suivi d'intervention</h4>
+    <ul>
+      <strong>Ouvrage associés :</strong> {{#section ""}}
+      {{#each features as |feature|}}
+      {{{prop feature ""}}},{{/each}}
+      {{/section}}
+      <strong>Adresse :</strong> {{{prop feature "ADRESS"}}}<br>
+      <strong>Nom de la commune :</strong> {{{prop feature "CITY_ID"}}}<br>
+      <!-- Ce sont déjà les DI/TA associées au CR (est-ce une relation 1-N ?) -->
+      {{#section "Demande d'intervention"}}
+      <strong>Demande d'intervention :</strong> {{{prop feature "NAME_4"}}}<br>
+      {{/section}}
+      {{#section "Ordre de travail"}}
+      <strong>Ordre de travail:</strong> {{{prop feature "NAME_3"}}}<br>
+      {{/section}}
+      {{#section "Tâche"}}
+      <strong>Numéro de tâche :</strong> {{{prop feature "NAME_5"}}}<br>
+      {{/section}}
+      
+  </ul>
+  </div>
+<br> 
+  <!-- Numéro de VISA + Boucle dans le cas ou plusieurs VISA sont présent -->
+    		
+        <div class="text-block">
+        <h4 class="undertext">VISA</h4>
+        <ul>
+           {{#section "VISA"}} 
+           {{#each features as |feature|}}
+          <strong>Type de VISA : </strong> {{{prop feature "ID_VISA_TYPE"}}}<br>
+          <strong>Statut du VISA :</strong>{{{prop feature "ID_STATE_5"}}}<br>
+      		<strong>Date de création du VISA :</strong>{{{prop feature "DATE_CREATE_1"}}}<br>
+          <strong>Date de Validation/refus VISA :</strong> {{{prop feature "DATE_VALIDATE"}}}<br>
+          {{/each}}
+          {{/section}}
+      </ul>
+      </div>
+<br>
+<!-- Le tableau recap des BPU -->
+<div class="text-block">  
+  <h4 class="undertext">Détails</h4>
+    </div>
+<table class="devis-table">
+    <thead>
+      <tr>
+
+        <th>Code</th>
+        <th>Libellé</th>
+        <th>Unité</th>
+        <th>Quantité</th>
+        <th>Prix unitaire HT</th>
+        <th>Prix total HT</th>
+        <th>Prix total TTC</th>
+      </tr>
+    </thead>
+    <tbody>
+{{#section "BPU"}}
+{{#each features as |feature|}}
+
+ <!-- #each est la boucle qui va permettre l'affichage de nos éléments si BPU est non null -->
+      <tr>
+        <td>{{{prop feature "CODE"}}}</td>
+        <td>{{{prop feature "LABEL_4"}}}</td>
+        <td>{{{prop feature ""}}}</td><!-- CHAMP MANQUANT-->
+        <td>{{{prop feature "QUANTITY"}}}</td>
+        <td>{{{prop feature ""}}}</td><!-- CHAMP MANQUANT-->
+        <td>{{{prop feature "PRICE"}}}</td>
+        <td>{{{prop feature ""}}} </td><!-- CHAMP MANQUANT-->
+      </tr> 
+      {{/each}}
+{{/section}} <!-- fin de la boucle  -->
+    </tbody>
+  </table>
+<div class="" style="text-align:right">
+<strong>Total HT :</strong> {{{prop feature "BPU_TOTAL_COST"}}}<br>
+<strong>Total TTC :</strong> {{{prop feature ""}}}<br> <!-- CHAMP MANQUANT-->                              
+</div>
+
+</body>
+</html>
